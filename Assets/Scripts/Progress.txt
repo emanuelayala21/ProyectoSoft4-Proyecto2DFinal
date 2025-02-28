@@ -22,7 +22,7 @@
 4. Creación de Enemigos
 	Tarea 4.1: Crear múltiples tipos de enemigos con diferentes características (vida, velocidad, etc.).
 	Tarea 4.2: Generar enemigos en oleadas, que lleguen en diferentes momentos y a intervalos regulares.
-	Tarea 4.3: Asegurarte de que los enemigos se muevan hacia la casa (utilizando AI para que sigan un camino o se dirijan directamente hacia la casa).
+	Tarea 4.3: Asegurarte de que los enemigos se muevan hacia la casa (utilizando AI para que sigan un camino o se dirijan directamente hacia la casa).  ✅
 	Tarea 4.4: Implementar diferentes comportamientos para los enemigos, como atacar la casa o solo acercarse.
 5. UI y Visualización
 	Tarea 5.1: Crear un sistema de interfaz de usuario (UI) que muestre:
@@ -32,7 +32,7 @@
 	Texto que indique los recursos actuales del jugador.
 	Tarea 5.2: Mostrar información de las mejoras disponibles, como cuánto cuesta cada mejora y cuál es el beneficio.
 6. Gestión de Recursos y Progresión
-	Tarea 6.1: Crear un sistema de recursos (dinero o puntos) que se acumulen cuando se eliminen enemigos.
+	Tarea 6.1: Crear un sistema de recursos (dinero o puntos) que se acumulen cuando se eliminen enemigos.  ✅
 	Tarea 6.2: Asegurarte de que el jugador pueda usar esos recursos para comprar mejoras para la casa.
 	Tarea 6.3: Establecer un sistema de progresión donde los enemigos se vuelven más fuertes y el jugador debe seguir mejorando la casa.
 7. Optimización y Pulido
@@ -52,14 +52,30 @@
 
 	--=-=---=-- commit--== --= - -=
 
+Fixed past bugs: bullet trajectory and resolved enemy rotation issue, added health bars, implemented damage system, 
 
 fixed bullet trayectory and angle to shoot to the enemy collider instead of the center of the enemy sprite 
 health bars added for enemies and player 
 enemies now can damage the house player and reduce their life
 player does damage to the enemies and could kill them 
 fixed the issue where the enemy rotates in circles 
+added txt file to track the progress 
 
 Issues: 
 player still shooting at dead enemies 
 
+
 commit 
+Fixed enemy collision, added knockback, reward system, and life regeneration
+
+Fixed the issue where enemies collided with each other when reaching the house.
+Added knockback behavior when a player's bullet hits an enemy.
+Implemented a coin and gem reward system; enemies now drop coins upon death.
+Fixed the issue with coin-enemy collisions.
+Added player life regeneration functionality.
+
+
+
+Issues: 
+Not an issue, but note that the player can damage multiple enemies at once (similar to a shotgun, so it may be ok ).
+The player still shoots at dead enemies (commit 2).

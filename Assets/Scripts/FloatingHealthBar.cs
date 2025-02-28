@@ -5,18 +5,13 @@ using UnityEngine.UI;
 
 public class FloatingHealthBar :MonoBehaviour {
 
-    private Slider _slider;
-
-    void Start() {
-        _slider = GetComponent<Slider>();
-    }
-
-    // Update is called once per frame
-    void Update() {
-
-    }
+    public Slider slider;
 
     public void UpdateHealthBar(float currentValue, float maxValue) {
-        _slider.value = currentValue / maxValue;
+        slider.value = currentValue / maxValue;
+
+        if(currentValue <= 0) {
+            slider.gameObject.SetActive(false);
+        }
     }
 }

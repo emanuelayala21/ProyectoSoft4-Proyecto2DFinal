@@ -7,21 +7,20 @@ using static UnityEngine.EventSystems.EventTrigger;
 public class MainHouse :MonoBehaviour {
 
     public float health = 50f; // House's health
-    public float healthMax; // House's health
+    public float healthMax =50f; // House's health
     public float fireRate = 1f; // Time between shots
     private float _lastFireTime = 0f; // Stores the time when the last shot was fired
     public float fireRange = 4.7f; // The range at which the house can fire
     private float _bulletSpeed = 15f; // Speed of the bullet
-    //public float knockback = 0.1f; // The force with which the enemy is pushed when hit (currently unused)
+    public float knockback = 0.0f; // The force with which the enemy is pushed when hit
 
-    //public float lifeRegeneration = 1f; // Regeneration of life (currently unused)
+    public float lifeRegeneration = 0.5f; // Regeneration of life (currently unused)
     public float damage = 3f; // The damage the house deals
 
     public GameObject bulletPrefab; // Bullet prefab to instantiate when shooting
     public Transform firePoint; // Position where bullets are instantiated
 
     private Animator _animator; // Animator to control the animations
-    private SpriteRenderer _spriteRenderer; // Sprite renderer to handle the sprite (currently unused)
 
     private Transform _currentTargetEnemy; // The current enemy the house is targeting
 
@@ -31,22 +30,20 @@ public class MainHouse :MonoBehaviour {
     }
     void Start() {
         _animator = GetComponent<Animator>();
-        _spriteRenderer = GetComponent<SpriteRenderer>();
 
         healthMax = health;
         _healthBar.UpdateHealthBar(health, healthMax);
+
+        StartCoroutine(HouseRegeneration());
     }
 
     void Update() {
         DetectEnemy();// Continuously checks for enemies in range
 
-        if(_currentTargetEnemy != null && Time.time - _lastFireTime >= fireRate) { // If there's a target and enough time has passed since the last shot, shoot again
-            ShootEnemy(_currentTargetEnemy); // Fire at the closest enemy
-            _lastFireTime = Time.time; // Update the last fire time
+        ShootEnemy(_currentTargetEnemy); // Fire at the closest enemy
 
-            _currentTargetEnemy = null; // Clear the current target
-            Debug.Log("Shot enemy ");
-        }
+        _healthBar.UpdateHealthBar(health, healthMax);
+
     }
     private void DetectEnemy() {
         Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, fireRange); // Detects all colliders within the fire range
@@ -77,19 +74,25 @@ public class MainHouse :MonoBehaviour {
             Debug.Log("Target updated to: " + (_currentTargetEnemy != null ? _currentTargetEnemy.name : "None"));
         }
     }
+
     private void ShootEnemy(Transform enemy) {
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation); // Create a bullet object at the fire point position
-        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+        if(_currentTargetEnemy != null && Time.time - _lastFireTime >= fireRate) {
+            GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation); // Create a bullet object at the fire point position
+            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
 
-        _animator.SetBool("Shot", true); // Activate the shooting animation
-        StartCoroutine(ResetShotAnimation()); // Reset the "Shot" animation after a short delay
+            _animator.SetBool("Shot", true); // Activate the shooting animation
+            StartCoroutine(ResetShotAnimation()); // Reset the "Shot" animation after a short delay
 
-        if(rb != null) {
-            Vector2 direction = (enemy.position - firePoint.position).normalized; // Calculate the direction towards the enemy
-            rb.velocity = direction * _bulletSpeed; // Set the bullet's velocity to move towards the enemy
+            if(rb != null) {
+                Vector2 direction = (enemy.position - firePoint.position).normalized; // Calculate the direction towards the enemy
+                rb.velocity = direction * _bulletSpeed; // Set the bullet's velocity to move towards the enemy
 
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg; // Rotate the bullet to face the enemy
-            bullet.transform.rotation = Quaternion.Euler(0, 0, angle);
+                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg; // Rotate the bullet to face the enemy
+                bullet.transform.rotation = Quaternion.Euler(0, 0, angle);
+            }
+            _lastFireTime = Time.time; // Update the last fire time
+
+            _currentTargetEnemy = null; // Clear the current target
         }
     }
     private IEnumerator ResetShotAnimation() {
@@ -97,10 +100,24 @@ public class MainHouse :MonoBehaviour {
         _animator.SetBool("Shot", false); // Disable shooting animation
     }
 
-    private void TakeDamage(float damageAmount) {
+    public void TakeDamage(float damageAmount) {
         health -= damageAmount;
         if(health < 0) {
             ///GAME OVER
+        }
+    }
+    private IEnumerator HouseRegeneration() {
+        Debug.Log("house regene ");
+
+        while(true) {
+            yield return new WaitForSeconds(1f); // Espera 1 segundo
+
+
+            if(health < healthMax) { // Solo regenera si la salud es menor que la máxima
+                health += lifeRegeneration; // Regenera la vida
+                health = Mathf.Min(health, healthMax); // Asegura que no se pase del máximo
+                _healthBar.UpdateHealthBar(health, healthMax); // Actualiza la barra de salud
+            }
         }
     }
 }

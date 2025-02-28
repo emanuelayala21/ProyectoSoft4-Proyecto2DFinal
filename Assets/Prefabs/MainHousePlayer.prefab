@@ -124,6 +124,7 @@ MonoBehaviour:
   healthMax: 0
   fireRate: 1
   fireRange: 4.7
+  knockback: 0.01
   damage: 3
   bulletPrefab: {fileID: 930904772707742091, guid: 0ecf58cbaa1ef6b4898be7859b9d0fd1, type: 3}
   firePoint: {fileID: 0}

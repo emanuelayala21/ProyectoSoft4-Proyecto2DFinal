@@ -17,7 +17,8 @@ public class Bullet :MonoBehaviour {
 
             EnemyAI enemy = collision.GetComponent<EnemyAI>();
             Debug.Log("Bullet hits enemy ");
-            enemy.TakeDamage(player.damage);
+            Vector2 knockbackDir = (enemy.transform.position - transform.position).normalized;
+            enemy.TakeDamage(player.damage, knockbackDir, player.knockback);
 
             Destroy(this.gameObject);// Destroy the bullet itself\
 

@@ -50,7 +50,7 @@
 	Tarea 10.2: Ajustar la dificultad de los enemigos y las mejoras para que el juego tenga una curva de dificultad adecuada.
 
 
-	--=-=---=-- commit--== --= - -=
+	--=-=---=-- commit 2--== --= - -=
 
 Fixed past bugs: bullet trajectory and resolved enemy rotation issue, added health bars, implemented damage system, 
 
@@ -65,7 +65,7 @@ Issues:
 player still shooting at dead enemies 
 
 
-commit 
+commit 3
 Fixed enemy collision, added knockback, reward system, and life regeneration
 
 Fixed the issue where enemies collided with each other when reaching the house.
@@ -74,8 +74,10 @@ Implemented a coin and gem reward system; enemies now drop coins upon death.
 Fixed the issue with coin-enemy collisions.
 Added player life regeneration functionality.
 
-
-
 Issues: 
 Not an issue, but note that the player can damage multiple enemies at once (similar to a shotgun, so it may be ok ).
 The player still shoots at dead enemies (commit 2).
+
+
+commit 4
+

@@ -81,3 +81,6 @@ The player still shoots at dead enemies (commit 2).
 
 commit 4
 
+added buttons for attack, defense and utilities, functionality are in progress
+
+

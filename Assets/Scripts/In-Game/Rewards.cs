@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Rewards :MonoBehaviour {
 
+    private void Start() {
+        StartCoroutine(DisappearAfterTime());
+    }
+
     void Update() {
         Limits();
     }
@@ -11,5 +15,11 @@ public class Rewards :MonoBehaviour {
         if(transform.position.y <= -3.76f) {
             transform.position = new Vector3(transform.position.x, -3.76f, transform.position.z); // Mantener la moneda en la posición de la barrera
         }
+    }
+    private IEnumerator DisappearAfterTime() {
+        yield return new WaitForSeconds(3.0f);
+
+        // Destruir el objeto después de esperar
+        Destroy(gameObject);
     }
 }

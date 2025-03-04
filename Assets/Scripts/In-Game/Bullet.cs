@@ -20,6 +20,7 @@ public class Bullet :MonoBehaviour {
             Vector2 knockbackDir = (enemy.transform.position - transform.position).normalized;
             enemy.TakeDamage(player.damage, knockbackDir, player.knockback);
 
+
             Destroy(this.gameObject);// Destroy the bullet itself\
 
         }

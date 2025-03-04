@@ -19,7 +19,7 @@ public class EnemyAI :MonoBehaviour {
 
     public GameObject coin_reward;
 
-    private MainHouse houseScript; // Referencia al script de la casa para llamar TakeDamage
+    private MainHouse playerScript; // Referencia al script de la casa para llamar TakeDamage
 
     private float timeBetweenAttacks = 2f; // Tiempo en segundos entre ataques
     private float timeSinceLastAttack = 0f;
@@ -32,7 +32,7 @@ public class EnemyAI :MonoBehaviour {
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         _targetHouse = FindObjectOfType<MainHouse>().transform;
-        houseScript = _targetHouse.GetComponent<MainHouse>();
+        playerScript = _targetHouse.GetComponent<MainHouse>();
 
         _enemyMaxHealth = enemyHealth;
         _healthBar.UpdateHealthBar(enemyHealth, _enemyMaxHealth);
@@ -70,8 +70,8 @@ public class EnemyAI :MonoBehaviour {
         }
     }
     private void AttackHouse() {
-        if(houseScript != null) {
-            houseScript.TakeDamage(_damage); // Llamar a TakeDamage de la casa (ejemplo con 2 de daño)
+        if(playerScript != null) {
+            playerScript.TakeDamage(_damage); // Llamar a TakeDamage de la casa (ejemplo con 2 de daño)
         }
     }
 
@@ -95,6 +95,8 @@ public class EnemyAI :MonoBehaviour {
             animator.SetBool("Attack", false); // Deactivate attack animation
             animator.Play("enemy_dead");
             StartCoroutine(DieAfterDelay());
+
+            playerScript.IncreaseMoney(1);
         }
     }
     private IEnumerator DieAfterDelay() {

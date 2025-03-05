@@ -4,29 +4,36 @@ using UnityEngine;
 
 public class Bullet :MonoBehaviour {
 
-    private Rigidbody2D _rb;
     private MainHouse player;
 
     void Start() {
-        _rb = GetComponent<Rigidbody2D>();
         player = FindObjectOfType<MainHouse>();
     }
-   
+
     void OnTriggerEnter2D(Collider2D collision) {
         if(collision.CompareTag("Enemy")) { // Check if the collision is with an object tagged as "Enemy"
 
             EnemyAI enemy = collision.GetComponent<EnemyAI>();
-            Debug.Log("Bullet hits enemy ");
-            Vector2 knockbackDir = (enemy.transform.position - transform.position).normalized;
-            enemy.TakeDamage(player.damage, knockbackDir, player.knockback);
 
+            bool isCriticalHit = IsCriticalHit();  // Determine if the hit is a critical hit
+            float finalDamage = isCriticalHit ? player.damage * 2.5f : player.damage; // Apply critical hit damage if applicable
+
+            Vector2 knockbackDir = (enemy.transform.position - transform.position).normalized; // Calculate knockback direction
+
+            enemy.TakeDamage(finalDamage, knockbackDir, player.knockback); // Apply damage and knockback to the enemy
 
             Destroy(this.gameObject);// Destroy the bullet itself\
 
         }
-        if(collision.CompareTag("Ground")) { // Destroy the bullet when it hits the ground
+        if(collision.CompareTag("Ground")) { // Check if the bullet hit the ground
             Destroy(this.gameObject);
 
         }
+    }
+    private bool IsCriticalHit() {
+        float critChance = player.criticChance; // Gets player critical hit chance
+        float randomValue = Random.Range(0f, 100f); // Generate a random value between 0 and 100
+
+        return randomValue <= critChance; // Return true if the random value is less than or equal to the critChance
     }
 }

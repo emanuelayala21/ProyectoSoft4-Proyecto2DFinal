@@ -6,7 +6,7 @@ public class EnemyAI :MonoBehaviour {
 
     private Transform _targetHouse; // The house that the enemy will attack
 
-    private float _speed = 0.9f; // Speed at which the enemy moves
+    private float _speed = 0.6f; // Speed at which the enemy moves
     private float _attackRange = 1.7f; // Range within which the enemy can attack the house
     private float _damage = 3f;
 
@@ -45,11 +45,10 @@ public class EnemyAI :MonoBehaviour {
     private void EnemyMovement() {
         float distance = Vector2.Distance(transform.position, new Vector2(_targetHouse.position.x, transform.position.y)); // Calculate the distance to the house in the x-axis
 
-        if(enemyHealth <= 0) {
-            // Si el enemigo está muerto, no puede atacar
-            animator.SetBool("isWalking", false); // Desactivar la animación de caminar
-            animator.SetBool("Attack", false); // Desactivar la animación de ataque
-            return; // No hacer nada más si el enemigo está muerto
+        if(enemyHealth <= 0) { // If the enemy is dead, it cannot attack
+            animator.SetBool("isWalking", false); // Deactivate walking animation
+            animator.SetBool("Attack", false); // Deactivate attack animation
+            return; // Exit the method if the enemy is dead
         }
 
         if(distance > _attackRange) { // If the enemy is not within attack range
@@ -61,69 +60,63 @@ public class EnemyAI :MonoBehaviour {
             animator.SetBool("isWalking", false); // Deactivate walking animation
             animator.SetBool("Attack", true); // Activate attack animation
 
-            timeSinceLastAttack += Time.deltaTime; // Aumentar el tiempo desde el último ataque
+            timeSinceLastAttack += Time.deltaTime; // Increase time since last attack
 
-            if(timeSinceLastAttack >= timeBetweenAttacks) { // Si ha pasado suficiente tiempo
-                timeSinceLastAttack = 0f; // Resetear el temporizador
-                AttackHouse(); // Llamar a la función que daña a la casa
+            if(timeSinceLastAttack >= timeBetweenAttacks) { // If enough time has passed
+                timeSinceLastAttack = 0f; // Reset the timer
+                AttackHouse(); // Call the function that damages the house
             }
         }
     }
     private void AttackHouse() {
-        if(playerScript != null) {
-            playerScript.TakeDamage(_damage); // Llamar a TakeDamage de la casa (ejemplo con 2 de daño)
+        if(playerScript != null) { // Check if the playerScript is assigned
+            playerScript.TakeDamage(_damage); // Call TakeDamage from the house (example with 2 damage)
         }
     }
-
     public void TakeDamage(float damageAmount, Vector2 knockbackDirection, float knockbackDistance) {
-        Debug.Log("enemy gets damage ");
-
-        if(enemyHealth <= 0) {
+        if(enemyHealth <= 0) { // If the enemy is already dead, exit the method
             return;
         }
 
-        enemyHealth -= damageAmount;
-        _healthBar.UpdateHealthBar(enemyHealth, _enemyMaxHealth); // Actualiza la barra de vida
+        enemyHealth -= damageAmount; // Subtract the damage from the enemy's health
+        _healthBar.UpdateHealthBar(enemyHealth, _enemyMaxHealth); // Update the health bar with the current health
 
-        Vector2 adjustedKnockback = new Vector2(-knockbackDirection.x, 0); // Only in X axis
-        StartCoroutine(ApplyKnockback(adjustedKnockback, knockbackDistance));
+        Vector2 adjustedKnockback = new Vector2(-knockbackDirection.x, 0); // Only apply knockback in the X axis
+        StartCoroutine(ApplyKnockback(adjustedKnockback, knockbackDistance)); // Apply knockback effect
 
-        if(enemyHealth <= 0) {
-            GameObject coin = Instantiate(coin_reward, transform.position, Quaternion.identity);
+        if(enemyHealth <= 0) { // If the enemy's health reaches zero or below, handle death
+            GameObject coin = Instantiate(coin_reward, transform.position, Quaternion.identity); // Spawn a coin reward
 
             animator.SetBool("isWalking", false); // Deactivate walking animation
             animator.SetBool("Attack", false); // Deactivate attack animation
-            animator.Play("enemy_dead");
-            StartCoroutine(DieAfterDelay());
+            animator.Play("enemy_dead"); // Play death animation
+            StartCoroutine(DieAfterDelay()); // Call the coroutine to destroy the enemy after a delay
 
-            playerScript.IncreaseMoney(1);
+            playerScript.IncreaseCoins(1); // Give coins to the player
         }
     }
     private IEnumerator DieAfterDelay() {
-        yield return new WaitForSeconds(5f); // Espera 5 segundos
-        Destroy(gameObject); // Destruye el GameObject del enemigo
+        yield return new WaitForSeconds(5f); // Wait for 5 seconds
+        Destroy(gameObject); // Destroy the enemy GameObject
     }
+
     private IEnumerator ApplyKnockback(Vector2 direction, float distance) {
-        float maxKnockbackDuration = 0.2f;
-        float knockbackDuration = Mathf.Clamp(maxKnockbackDuration * (distance / 2), 0.1f, maxKnockbackDuration);
+        float maxKnockbackDuration = 0.2f; // Maximum duration for the knockback effect
+        float knockbackDuration = Mathf.Clamp(maxKnockbackDuration * (distance / 2), 0.1f, maxKnockbackDuration); // Calculate the knockback duration based on distance
         float elapsedTime = 0f;
 
-        Vector2 startPosition = transform.position;
+        Vector2 startPosition = transform.position; // Record the starting position of the enemy
 
-        // Calculate target position, only on X axis
-        Vector2 targetPosition = new Vector2(
-            startPosition.x + (direction.normalized.x * distance), // Only apply knockback on X
-            startPosition.y // Keep Y position the same
+        Vector2 targetPosition = new Vector2(// Calculate the target knockback position (only on the X axis)
+            startPosition.x + (direction.normalized.x * distance), // Apply knockback to the X axis
+            startPosition.y // Keep the Y position the same to avoid the issue where enemy rotates haha
         );
 
-        // Move the enemy to the knockback position smoothly
-        while(elapsedTime < knockbackDuration) {
-            transform.position = Vector2.Lerp(startPosition, targetPosition, (elapsedTime / knockbackDuration));
-            elapsedTime += Time.deltaTime;
-            yield return null;
+        while(elapsedTime < knockbackDuration) {  // Move the enemy to the knockback position smoothly
+            transform.position = Vector2.Lerp(startPosition, targetPosition, (elapsedTime / knockbackDuration)); // Smoothly move the enemy
+            elapsedTime += Time.deltaTime; // Increase the elapsed time
+            yield return null; // Wait for the next frame
         }
-
-        // Enemy stays in the knocked-back position
-        transform.position = targetPosition;
+        transform.position = targetPosition; // Ensure the enemy reaches the final knockback position
     }
 }

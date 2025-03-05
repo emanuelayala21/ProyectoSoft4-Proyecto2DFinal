@@ -12,13 +12,13 @@
 	Tarea 2.3: Reducir la vida del enemigo cuando sea golpeado por la bala. ✅
 	Tarea 2.4: Eliminar al enemigo (y su barra de vida) cuando su vida llegue a 0. ✅
 3. Sistema de Mejoras de la Casa
-	Tarea 3.1: Crear botones en la interfaz de usuario para mejorar la casa.
-	Tarea 3.2: Implementar mejoras que afecten el daño, rango y fire rate de la casa.
-	Mejora de Daño: Aumentar el daño que hace la bala a los enemigos.
+	Tarea 3.1: Crear botones en la interfaz de usuario para mejorar la casa. ✅
+	Tarea 3.2: Implementar mejoras que afecten el daño, rango y fire rate de la casa. ✅
+	Mejora de Daño: Aumentar el daño que hace la bala a los enemigos. ✅
 	Mejora de Rango: Aumentar el rango de detección de enemigos para que la casa dispare antes.
 	Mejora de Fire Rate: Reducir el intervalo entre disparos.
-	Tarea 3.3: Asegurarte de que cada mejora cueste una cantidad de recursos o dinero que el jugador pueda ganar a lo largo del juego (por ejemplo, cada vez que elimine un enemigo).
-	Tarea 3.4: Al mejorar la casa, actualizar las características de disparo y las propiedades visuales de la casa si es necesario (como un cambio en la apariencia).
+	Tarea 3.3: Asegurarte de que cada mejora cueste una cantidad de recursos o dinero que el jugador pueda ganar a lo largo del juego✅
+	Tarea 3.4: Al mejorar la casa, actualizar las características de disparo y las propiedades visuales de la casa si es necesario ✅
 4. Creación de Enemigos
 	Tarea 4.1: Crear múltiples tipos de enemigos con diferentes características (vida, velocidad, etc.).
 	Tarea 4.2: Generar enemigos en oleadas, que lleguen en diferentes momentos y a intervalos regulares.
@@ -80,7 +80,15 @@ The player still shoots at dead enemies (commit 2).
 
 
 commit 4
+Player Upgrades, Coin System, UI Manager, and Critical Chance Behavior
 
-added buttons for attack, defense and utilities, functionality are in progress
+ Added buttons for attack, defense, and utility upgrades that the player can purchase with coins. Currently, only the attack upgrades are functioning.
+Enemies now drop coins when defeated. The player is rewarded with the amount of coins dropped, which can be used for upgrades.
+ Integrated a UI manager to assist with displaying important messages. It handles showing the confirmation message for upgrades, as well as a message when the player doesn’t have enough coins.
+Implemented a critical chance mechanic for the player's bullets, allowing for a chance to deal extra damage when a critical hit occurs. (2.5 X damage)
+
+Issues: 
+Not an issue, but note that the player can damage multiple enemies at once (similar to a shotgun, so it may be ok ). (commit 3 - dont think about it yet)
+The player still shoots at dead enemies (commit 2).
 
 

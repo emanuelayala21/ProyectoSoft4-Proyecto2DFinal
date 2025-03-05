@@ -19,33 +19,28 @@ public class PanelToggle : MonoBehaviour {
         if (_panelUtility != null) _panelUtility.SetActive(false);
 
 
-        if (_panelAttack != null) {
-            _panelAttack.SetActive(true);
-            _currentPanel = _panelAttack; // Lo asignamos como el panel actual
+        if(_panelAttack != null) { // If attack panel is found
+            _panelAttack.SetActive(true); // Activate attack panel
+            _currentPanel = _panelAttack; // Set attack panel as the current active panel
         }
     }
     public void toggleAttackPanel() {
-        SwitchPanel(_panelAttack);
+        SwitchPanel(_panelAttack); // Switch to the attack panel
     }
     public void ToggleDefensePanel() {
-        SwitchPanel(_panelDefense);
+        SwitchPanel(_panelDefense); // Switch to the defense panel
     }
     public void ToggleUtilityPanel() {
-        SwitchPanel(_panelUtility);
+        SwitchPanel(_panelUtility); // Switch to the utility panel
     }
     private void SwitchPanel(GameObject newPanel) {
-        // Si el panel que queremos mostrar ya es el actual, no hacemos nada
-        if (_currentPanel == newPanel) {
+        if(_currentPanel == newPanel) {  // If the new panel is already the current one, do nothing
             return;
         }
-
-        // Si hay un panel activo, lo desactivamos
-        if (_currentPanel != null) {
+        if(_currentPanel != null) {  // If there is an active panel, deactivate it
             _currentPanel.SetActive(false);
         }
-
-        // Activamos el nuevo panel y actualizamos la referencia de _currentPanel
-        if (newPanel != null) {
+        if(newPanel != null) {  // Activate the new panel and set it as the current panel
             newPanel.SetActive(true);
             _currentPanel = newPanel;
         }

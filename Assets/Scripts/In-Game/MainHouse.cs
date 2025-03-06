@@ -6,30 +6,32 @@ using static UnityEngine.EventSystems.EventTrigger;
 
 public class MainHouse :MonoBehaviour {
 
-    public float health = 50f; // House's health
-    public float healthMax = 50f; // House's health
-    public float fireRate = 1f; // Time between shots
-    private float _lastFireTime = 0f; // Stores the time when the last shot was fired
-    public float fireRange = 4.7f; // The range at which the house can fire
-    private float _bulletSpeed = 15f; // Speed of the bullet
-    public float knockback = 0.0f; // The force with which the enemy is pushed when hit
+    // House's Stats
+    public float health = 50f;       // Current health of the house
+    public float healthMax = 50f;    // Maximum health of the house
+    public float healthRegen = 0.5f; // Regeneration of life (currently unused)
 
-    public float lifeRegeneration = 0.5f; // Regeneration of life (currently unused)
-    public float damage = 3f; // The damage the house deals
-    public float criticChance = 1f;
+    // Attack Properties
+    public float damage = 3f;        // Damage dealt by the house
+    public float criticChance = 1f;  // Critical hit chance
+    public float fireRate = 1f;      // Time between shots
+    private float _lastFireTime = 0f;// Time when the last shot was fired
+    public float fireRange = 4.7f;   // Range at which the house can fire
+    private float _bulletSpeed = 15f;// Speed of the bullet
+    public float knockback = 0.0f;   // Force applied to enemies when hit
 
-    public int coins = 0;
+    // Resources & UI
+    public int coins = 0;            // Player's collected coins
+    public UIManager uiManager;      // Reference to the UI manager
+    private FloatingHealthBar _healthBar; // Health bar UI reference
 
-    public GameObject bulletPrefab; // Bullet prefab to instantiate when shooting
-    public Transform firePoint; // Position where bullets are instantiated
+    // Shooting System
+    public GameObject bulletPrefab;  // Prefab of the bullet to shoot
+    public Transform firePoint;      // Position where bullets are instantiated
 
-    private Animator _animator; // Animator to control the animations
-
-    private Transform _currentTargetEnemy; // The current enemy the house is targeting
-
-    private FloatingHealthBar _healthBar;
-
-    public UIManager uiManager;
+    // Animation & Targeting
+    private Animator _animator;      // Animator for animations
+    private Transform _currentTargetEnemy; // Current enemy being targeted
 
     private void Awake() {
         _healthBar = GetComponentInChildren<FloatingHealthBar>();
@@ -44,10 +46,10 @@ public class MainHouse :MonoBehaviour {
     }
 
     void Update() {
-        DetectEnemy();// Continuously checks for enemies in range
-
-        ShootEnemy(_currentTargetEnemy); // Fire at the closest enemy
-
+        if (health >= 0f) {
+            DetectEnemy();// Continuously checks for enemies in range
+            ShootEnemy(_currentTargetEnemy); // Fire at the closest enemy
+        }
         _healthBar.UpdateHealthBar(health, healthMax);
 
     }
@@ -62,7 +64,6 @@ public class MainHouse :MonoBehaviour {
 
                 EnemyAI enemyAI = enemy.GetComponent<EnemyAI>(); // Get the EnemyAI component
                 if(enemyAI != null && enemyAI.enemyHealth > 0) {
-                    Debug.Log("enemy with more than 0 life: or it aint" + enemyAI.name + "     " + enemyAI.enemyHealth);
 
                     Vector2 colliderCenter = enemy.bounds.center + new Vector3(0.40f, 0f, 0f);
                     float distance = Vector2.Distance(transform.position, colliderCenter);
@@ -108,7 +109,8 @@ public class MainHouse :MonoBehaviour {
     public void TakeDamage(float damageAmount) {
         health -= damageAmount; // Deduct the damage amount from the current health
         if(health < 0) { // Check if the health goes below 0
-                         //GAME OVER 
+            uiManager.GameOver();
+            
         }
     }
 
@@ -117,7 +119,7 @@ public class MainHouse :MonoBehaviour {
             yield return new WaitForSeconds(1f); // Wait for 1 second before checking health again
 
             if(health < healthMax) { // Only regenerate health if it's below the max
-                health += lifeRegeneration; // Increase health by the regeneration amount
+                health += healthRegen; // Increase health by the regeneration amount
                 health = Mathf.Min(health, healthMax); // Ensure health does not exceed the maximum health
                 _healthBar.UpdateHealthBar(health, healthMax); // Update the health bar UI with the new health value
             }
@@ -150,6 +152,16 @@ public class MainHouse :MonoBehaviour {
                 break;
             case 3:
                 fireRange += upgradeAmount; ///apply more fire range 
+                break;
+            case 4:
+                healthMax += upgradeAmount; ///apply more fire range 
+                health += upgradeAmount;
+                break;
+            case 5:
+                healthRegen += upgradeAmount; ///apply more fire range 
+                break;
+            case 6:
+                knockback += upgradeAmount; ///apply more fire range 
                 break;
             default:
                 break;

@@ -18,15 +18,15 @@ public class BoostBtns :MonoBehaviour {
     private float[] _rangeBoost = new float[] { 4.7f, 5.0f, 5.5f, 6.2f, 7.0f, 8.0f, 9.2f, 10.5f, 12.0f, 14.0f };
 
     ///Defense Boost
+    private float[] _liveMaxBoost = new float[] { 50, 60, 72, 86, 102, 120, 140, 162, 186, 200 };
+    private float[] _regenBoost = new float[] { 0.5f, 1.0f, 1.5f, 2.2f, 3.0f, 3.8f, 4.7f, 5.5f, 6.5f, 7.5f };
+    private float[] _knockbackBoost = new float[] { 0.0f, 0.01f, 0.03f, 0.05f, 0.07f, 0.09f, 1.2f, 1.5f, 2f, 2.4f };
 
-
-
-    ///Utility Boost
+    ///Utility Boost 
 
     void Start() {
         player = FindObjectOfType<MainHouse>();
     }
-
     public void TypeBoostBtn(int upgradeType) {
         _selectedBoost = upgradeType; // Store the selected upgrade type
         (int price, float nextValue, float currentBoost) = GetNextBoostValue(upgradeType); // Get the price, next boost value, and current boost value for the selected upgrade
@@ -58,23 +58,27 @@ public class BoostBtns :MonoBehaviour {
 
         return (price, nextBoostValue, currentBoost); // Return the price, next value, and current boost
     }
-
     private float GetCurrentBoostValue(int boostType) {
         switch(boostType) {
-            case 0: return player.damage; // Return the current damage value
-            case 1: return player.fireRate; // Return the current fire rate value
-            case 2: return player.criticChance; // Return the current critical chance value
-            case 3: return player.fireRange; // Return the current fire range value
+            case 0: return player.damage;         // Current damage value
+            case 1: return player.fireRate;       // Current fire rate value
+            case 2: return player.criticChance;   // Current critical chance value
+            case 3: return player.fireRange;      // Current fire range value
+            case 4: return player.healthMax;      // Current max health value
+            case 5: return player.healthRegen; // Current life regeneration value
+            case 6: return player.knockback;      // Current knockback value
             default: return 0; // Return 0 if no valid boost type is found
         }
     }
-
     private float[] GetBoostArray(int boostType) {
         switch(boostType) {
-            case 0: return _damageBoost; // Return the damage boost array
-            case 1: return _fireRateBoost; // Return the fire rate boost array
-            case 2: return _critChanceBoost; // Return the critical chance boost array
-            case 3: return _rangeBoost; // Return the fire range boost array
+            case 0: return _damageBoost;       // Damage boost array
+            case 1: return _fireRateBoost;     // Fire rate boost array
+            case 2: return _critChanceBoost;   // Critical chance boost array
+            case 3: return _rangeBoost;        // Fire range boost array
+            case 4: return _liveMaxBoost;      // Max health boost array
+            case 5: return _regenBoost;        // Life regeneration boost array
+            case 6: return _knockbackBoost;    // Knockback boost array
             default: return null; // Return null if no valid boost type is found
         }
     }

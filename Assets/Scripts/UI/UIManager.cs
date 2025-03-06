@@ -14,7 +14,10 @@ public class UIManager :MonoBehaviour {
     public TextMeshProUGUI textNoFunds;
     public TextMeshProUGUI textBuyConfirmation;
 
+    public GameObject _panelGameOver;
+
     void Start() {
+
         // Initialize the texts with a placeholder
         textPrice.text = "?"; 
         textActualStat.text = "?"; 
@@ -55,5 +58,12 @@ public class UIManager :MonoBehaviour {
     private IEnumerator DisableBuyConfMsg() {
         yield return new WaitForSeconds(2f); // Wait for 2 seconds before hiding the "no funds" message
         textBuyConfirmation.gameObject.SetActive(false); // Hide the "no funds" message
+    }
+    public void GameOver() {
+        _panelGameOver.gameObject.SetActive(true);
+        Time.timeScale = 0f;
+    }
+    public void RestartGame() {
+        _panelGameOver.gameObject.SetActive(false);
     }
 }

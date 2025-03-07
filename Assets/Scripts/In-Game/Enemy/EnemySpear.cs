@@ -10,7 +10,7 @@ public class EnemySpear :EnemyAI {
         _attackRange = 2.8f;
         _damage = 1f;
         timeBetweenAttacks = 2f;
-        enemyHealth = 20f;
+        enemyHealth = 30f;
         base.Start(); // Call the base Start method 
     }
     public override void EnemyMovement() {
@@ -87,7 +87,7 @@ public class EnemySpear :EnemyAI {
             animator.SetBool("Attack", false);
             animator.Play("enemy_dead"); // Play the death animation
             StartCoroutine(DieAfterDelay()); // Wait and destroy the enemy
-            playerScript.IncreaseCoins(1); // Reward the player
+            playerScript.IncreaseCoins(2); // Reward the player
         } else {
             StartCoroutine(DisabledHit()); // Delay reset of isHit
         }

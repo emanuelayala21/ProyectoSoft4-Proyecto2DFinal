@@ -9,7 +9,7 @@ public class EnemyShield :EnemyAI {
         _attackRange = 1.5f;
         _damage = 2f;
         timeBetweenAttacks = 1f;
-        enemyHealth = 20f; // Slightly higher health
+        enemyHealth = 25f; // Slightly higher health
         base.Start();
     }
     public override void EnemyMovement() {
@@ -76,7 +76,7 @@ public class EnemyShield :EnemyAI {
             animator.SetBool("Attack", false);
             animator.Play("enemy_dead");
             StartCoroutine(DieAfterDelay());
-            playerScript.IncreaseCoins(1);
+            playerScript.IncreaseCoins(3);
         } else {
             StartCoroutine(DisabledHit());
         }

@@ -111,3 +111,10 @@ Implemented a game over screen when the player loses all health.
 Issues: 
 Not an issue, but note that the player can damage multiple enemies at once (similar to a shotgun, so it may be ok ). (commit 3 - dont think about it yet)
 The player still shoots at dead enemies (commit 2).
+
+
+commit 6: 
+
+
+add 3 boss enemies 
+enemy spawn for wave enemies 
